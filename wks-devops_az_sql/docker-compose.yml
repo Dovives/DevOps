@@ -1,20 +1,30 @@
 version: "3"
 services:
-
-    api:
+    webapp:
         build: ./dotnetcore-api
         ports:
             - "5000:5000"
         depends_on:
             - db
-    db:
+    db1:
         build:
             context: ./
-            dockerfile: ./mssql-db/docker/Dockerfile
+            dockerfile: ./mssql-db/db1/Dockerfile
             args:
                 DBNAME : ${DBNAME}
                 PASSWORD : ${PASSWORD}
                 MPID : ${MPID}
         ports:
-            - "1433:1433"
-        container_name: db
+            - "2500:1433"
+        container_name: db1
+    db2:
+        build:
+            context: ./
+            dockerfile: ./mssql-db/db2/Dockerfile
+            args:
+                DBNAME : ${DBNAME}
+                PASSWORD : ${PASSWORD}
+                MPID : ${MPID}
+        ports:
+            - "2600:1433"
+        container_name: db2
