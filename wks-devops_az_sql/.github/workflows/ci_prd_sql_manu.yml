@@ -1,0 +1,52 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI_prd_sql_auto_workflow 
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+
+  workflow_dispatch:
+
+  workflow_run:
+    workflows: ["ci_stg_sql_manu_workflow "]
+    branches: [master]
+    types: 
+      - completed
+
+
+jobs:
+  # This workflow contains a twos job called "sql-build" & "sql-deploy"
+    # This workflow contains a twos job called "sql-build" & "sql-deploy"
+  sql-deploy:
+    runs-on: windows-latest
+    
+    env:
+      ENV: prd
+      LOCATION: westeurope
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Run a multi-line script
+      shell: bash
+      run: echo Checking ${{ env.SQLSERVER }} ${{ env.SQLCONNECTIONSTRING }} variable,
+      
+
+    - uses: azure/login@v1.1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Azure SQL Deploy
+      uses: Azure/sql-action@v1
+      with:
+        # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+        server-name: pitchoun-sql-${{ env.ENV }}.database.windows.net
+        # The connection string, including authentication information, for the Azure SQL Server database.
+        connection-string: Server=tcp:pitchoun-sql-${{ env.ENV }}.database.windows.net,1433;Initial Catalog=pitchoun-db-${{ env.ENV }};Persist Security Info=False;User ID=${{ secrets.SQL_SA_USER }};Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+        # Path to DACPAC file. *.dacpac or a folder to deploy
+        dacpac-package: ./mssql-db/dacpac/pitchoundb-1.0.0.dacpac
+        # Path to SQL script file. *.sql or a folder to deploy
+        #sql-file: # optional
+        # In case DACPAC option is selected, additional SqlPackage.exe arguments that will be applied. When SQL query option is selected, additional sqlcmd.exe arguments will be applied.
+        #arguments: # optional
