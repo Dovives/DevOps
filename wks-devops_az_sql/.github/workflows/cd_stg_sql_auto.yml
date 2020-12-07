@@ -60,9 +60,9 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: 1619bfac-1484-4da0-95cc-dec25338e962
-          resourceGroupName: pitchoun-${{ env.ENV }}-rg
+          resourceGroupName: wksdevopsql-${{ env.ENV }}-rg
           template: mssql-db/arm/azuredeploy.json
-          parameters: 'serverName="pitchoun-sql-${{ env.ENV }}" sqlDBName="pitchoun-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }}'
+          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }}'
         
 
   # This workflow contains a twos job called "sql-build" & "sql-deploy"
@@ -72,7 +72,7 @@ jobs:
   #   env:
   #     ENV: stg
   #     LOCATION: westeurope
-  #     SQLSERVER: pitchoun-sql-stg.database.windows.net
+  #     SQLSERVER: wksdevopsql-sql-stg.database.windows.net
 
   #   steps:
   #   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -87,9 +87,9 @@ jobs:
   #       # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
   #       server-name: ${{ env.SQLSERVER }}
   #       # The connection string, including authentication information, for the Azure SQL Server database.
-  #       connection-string: Server=tcp:${{ env.SQLSERVER }},1433;Initial Catalog=Pitchoun-Db-${{ env.ENV }};Persist Security Info=False;User ID=dovives;Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+  #       connection-string: Server=tcp:${{ env.SQLSERVER }},1433;Initial Catalog=wksdevopsql-Db-${{ env.ENV }};Persist Security Info=False;User ID=dovives;Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
   #       # Path to DACPAC file. *.dacpac or a folder to deploy
-  #       dacpac-package: ./mssql-db/dacpac/pitchoundb-1.0.0.dacpac
+  #       dacpac-package: ./mssql-db/dacpac/wksdevopsqldb-1.0.0.dacpac
   #       # Path to SQL script file. *.sql or a folder to deploy
   #       #sql-file: # optional
   #       # In case DACPAC option is selected, additional SqlPackage.exe arguments that will be applied. When SQL query option is selected, additional sqlcmd.exe arguments will be applied.

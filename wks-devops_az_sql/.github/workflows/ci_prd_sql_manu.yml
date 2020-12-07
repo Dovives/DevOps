@@ -41,11 +41,11 @@ jobs:
       uses: Azure/sql-action@v1
       with:
         # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
-        server-name: pitchoun-sql-${{ env.ENV }}.database.windows.net
+        server-name: wksdevopsql-sql-${{ env.ENV }}.database.windows.net
         # The connection string, including authentication information, for the Azure SQL Server database.
-        connection-string: Server=tcp:pitchoun-sql-${{ env.ENV }}.database.windows.net,1433;Initial Catalog=pitchoun-db-${{ env.ENV }};Persist Security Info=False;User ID=${{ secrets.SQL_SA_USER }};Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+        connection-string: Server=tcp:wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433;Initial Catalog=wksdevopsql-db-${{ env.ENV }};Persist Security Info=False;User ID=${{ secrets.SQL_SA_USER }};Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
         # Path to DACPAC file. *.dacpac or a folder to deploy
-        dacpac-package: ./mssql-db/dacpac/pitchoundb-1.0.0.dacpac
+        dacpac-package: ./mssql-db/dacpac/wksdevopsqldb-1.0.0.dacpac
         # Path to SQL script file. *.sql or a folder to deploy
         #sql-file: # optional
         # In case DACPAC option is selected, additional SqlPackage.exe arguments that will be applied. When SQL query option is selected, additional sqlcmd.exe arguments will be applied.

@@ -46,7 +46,7 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: 1619bfac-1484-4da0-95cc-dec25338e962
-          resourceGroupName: pitchoun-${{ env.ENV }}-rg
+          resourceGroupName: wksdevopsql-${{ env.ENV }}-rg
           template: mssql-db/arm/azuredeploy.json
-          parameters: 'serverName="pitchoun-sql-${{ env.ENV }}" sqlDBName="pitchoun-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }}'
+          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }}'
         

@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serverName": {
-            "value": "pitchoun-sql-env"
+            "value": "wksdevopsql-sql-env"
         },
         "sqlDBName": {
-            "value": "PitchounDd-env"
+            "value": "wksdevopsql-db-env"
         },
         "location": {
         "value": "[resourceGroup().location]"
