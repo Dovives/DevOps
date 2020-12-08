@@ -15,38 +15,33 @@ on:
 
 jobs:
   # This workflow contains a twos job called "sql-build" & "sql-deploy"
-  sql-build:
+  sql-deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     env:
       ENV: prd
       LOCATION: westeurope
+      EDITION: standard
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: Upload a ARM Template Artifact for Version Control
-        uses: actions/upload-artifact@v2.1.4
-        with:
-          # Artifact name
-          name: Az_Sql_ARM_Template
-          # A file, directory or wildcard pattern that describes what to upload
-          path: mssql-db/arm/**.json
-          # The desired behavior if no files are found using the provided path. 
-          if-no-files-found: error      
       
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
+
+      - name: CLI Creating Resource Group
+        run: |
+          az group create -l westeurope -n wks-devopsql-${{ env.ENV }}-rg
+
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: 1619bfac-1484-4da0-95cc-dec25338e962
-          resourceGroupName: wksdevopsql-${{ env.ENV }}-rg
-          template: mssql-db/arm/azuredeploy.json
-          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }}'
-        
+          resourceGroupName: wks-devopsql-${{ env.ENV }}-rg
+          template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
+          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
+      

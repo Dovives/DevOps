@@ -16,6 +16,12 @@
         },
         "administratorLoginPassword": {
             "value": "GEN-PASSWORD"
+        },
+        "databaseEdition": {
+            "value": "basic"
+        },
+        "env": {
+            "value": "dev"
         }
     }
 }
