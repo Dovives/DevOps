@@ -8,15 +8,16 @@ name: CD_dev_sql_auto_workflow
 on:
   push:
     # file paths to consider in the event. Optional; defaults to all.
+    branches:  
+      - master    
     paths:
-       - '**wks-devops_az_sql/msql-db/arm/**'
-    branches: [ master ]
+      - '**wks-devops_az_sql/mssql-db/arm**'
 
-  pull_request:
-    # file paths to consider in the event. Optional; defaults to all.
-    paths:
-      - '**wks-devops_az_sql/msql-db/arm/**'
-    branches: [ master ]
+  # pull_request:
+  #   # file paths to consider in the event. Optional; defaults to all.
+  #   paths:
+  #     - '**wks-devops_az_sql/msql-db/arm/**'
+  #   branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
