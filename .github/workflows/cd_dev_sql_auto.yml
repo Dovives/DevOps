@@ -51,6 +51,3 @@ jobs:
           template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
           parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }}'
       
-      - name: Save Workflow State for future Workflow 
-        run: console.log('::save-state name=processID::12345') 
-
