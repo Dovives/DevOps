@@ -35,13 +35,25 @@
           "description": "The administrator password of the SQL logical server."
         }
       },      
-        "allowAzureIPs": {
-            "defaultValue": true,
-            "type": "bool",
-            "metadata": {
-                "description": "Allow Azure services to access server."
-            }
+      "allowAzureIPs": {
+          "defaultValue": true,
+          "type": "bool",
+          "metadata": {
+              "description": "Allow Azure services to access server."
+          }
+      },
+      "databaseEdition": {
+        "type": "string",
+        "metadata": {
+          "description": "The administrator username of the SQL logical server."
         }
+      },
+      "env": {
+        "type": "string",
+        "metadata": {
+          "description": "The administrator username of the SQL logical server."
+        }
+      }
     },
     "variables": {},
     "resources": [
@@ -50,6 +62,10 @@
             "apiVersion": "2019-06-01-preview",
             "name": "[parameters('serverName')]",
             "location": "[parameters('location')]",
+            "tags": {
+              "displayName": "SqlServer",
+              "env": "[parameters('env')]"
+            },
             "properties": {
                 "administratorLogin": "[parameters('administratorLogin')]",
                 "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
@@ -59,9 +75,13 @@
                 "type": "databases",
                 "apiVersion": "2019-06-01-preview",
                 "name": "[parameters('sqlDBName')]",
+                "tags": {
+                  "displayName": "database",
+                  "env": "[parameters('env')]"
+                },
                 "sku": {
-                    "name": "Standard",
-                    "tier": "Standard"
+                    "name": "[parameters('databaseEdition')]",
+                    "tier": "[parameters('databaseEdition')]"
                     },
                 "location": "[parameters('location')]",
                 "dependsOn": [
