@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serverName": {
-            "value": "wksdevopsql-sql-env"
+            "value": "wksdevopazsql-sql-env"
         },
         "sqlDBName": {
-            "value": "wksdevopsql-db-env"
+            "value": "wksdevopazsql-db-env"
         },
         "location": {
         "value": "[resourceGroup().location]"
