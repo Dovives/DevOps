@@ -9,7 +9,7 @@ ENV SA_PASSWORD=${PASSWORD}
 ENV MSSQL_AGENT_ENABLED=true
 #ENV MSSQL_PID=$(MPID)
 
-
+# Switch to root user for access to apt-get install
 USER root
 RUN apt-get update && apt-get install unzip -y
 
@@ -34,6 +34,9 @@ RUN chmod +x /db-init.sh
 
 RUN   sed -i "s|PwdToReplace|${PASSWORD} |g" /db-init.sh
 RUN   sed -i "s|DbNameToReplace|${DBNAME} |g" /db-init.sh
+
+# Switch back to mssql user and run the entrypoint script
+USER mssql
 
 #https://stackoverflow.com/questions/32727594/how-to-pass-arguments-to-shell-script-through-docker-run/32728266
 ENTRYPOINT ["/bin/bash"]

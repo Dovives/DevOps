@@ -28,7 +28,7 @@ sleep 50s
 #/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P safePASSWORD123 -d master -i db-init.sql
 #use a Dacpac file 
 #/tmp/sqlpackage/sqlpackage /a:Publish /tsn:localhost /tdn:pitchoun-sql-dev /tu:SA /tp:safePASSWORD123 /sf:/tmp/db/database.dacpac 
-/tmp/sqlpackage/sqlpackage /a:Publish /tsn:localhost /tdn:DbNameToReplace /tu:SA /tp:PwdToReplace /sf:/tmp/db/database.dacpac 
+#/tmp/sqlpackage/sqlpackage /a:Publish /tsn:localhost /tdn:DbNameToReplace /tu:SA /tp:PwdToReplace /sf:/tmp/db/database.dacpac 
 
 #use a bacpac file 
-#/tmp/sqlpackage/sqlpackage /a:Import /tsn:localhost /tdn:Database /tu:SA /tp:safePASSWORD123 /sf:/tmp/db/database.bacpac 
+/tmp/sqlpackage/sqlpackage /a:Import /tsn:localhost /tdn:DbNameToReplace /tu:SA /tp:PwdToReplace /sf:/tmp/db/database.bacpac 

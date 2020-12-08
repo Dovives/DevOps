@@ -18,14 +18,16 @@ RUN wget -O sqlpackage.zip https://go.microsoft.com/fwlink/?linkid=873926 \
     && unzip sqlpackage.zip -d /tmp/sqlpackage \
     && chmod +x /tmp/sqlpackage/sqlpackage
 
+COPY ./mssql-db/db3/rewardsdb.bacpac /tmp/db/database.bacpac 
 
-COPY ./mssql-db/db1/rewardsdb.sql /db-init.sql 
-COPY ./mssql-db/db1/db-init.sh /db-init.sh
-COPY ./mssql-db/db1/entrypoint.sh /entrypoint.sh
+#COPY ./mssql-db/docker/db-init.sql /db-init.sql
+COPY ./mssql-db/db3/db-init.sh /db-init.sh
+COPY ./mssql-db/db3/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /db-init.sh
-RUN chmod +x /db-init.sql 
+#RUN chmod +x /db-init.sql
+
 
 #Debug 
 #RUN echo "Will replace DB Name by : ${DBNAME} or ${PASSWORD}"
@@ -42,7 +44,7 @@ CMD ["./entrypoint.sh"]
 
 # CMD /bin/bash ./entrypoint.sh
 
-# Old Method to start SQL with Dacpac
+
 # grep command to check if SQL server is already started taken from https://stackoverflow.com/a/51589787/488695 https://stackoverflow.com/questions/46888045/docker-mssql-server-linux-how-to-launch-sql-file-during-build-from-dockerfi/51589787#51589787
 # RUN ( /opt/mssql/bin/sqlservr & ) | grep -q "Service Broker manager has started" \
 #     && /tmp/sqlpackage/sqlpackage /a:Import /tsn:localhost,1433 /tdn:Database /tu:sa /tp:yourStrong(!)Password /sf:/tmp/db/database.bacpac \

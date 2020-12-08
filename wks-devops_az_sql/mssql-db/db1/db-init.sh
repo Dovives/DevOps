@@ -1,5 +1,5 @@
 #wait for the SQL Server to come up
-sleep 30s
+sleep 50s
 
 
 # Wait 60 seconds for SQL Server to start up by ensuring that 
@@ -26,6 +26,7 @@ sleep 30s
 
 #run the setup script to create the DB and the schema in the DB
 #/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P safePASSWORD123 -d master -i db-init.sql
+/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P PwdToReplace -d master -i db-init.sql
 
 # use a Dacpac file 
 # /tmp/sqlpackage/sqlpackage /a:Publish /tsn:localhost /tdn:pitchoun-sql-dev /tu:SA /tp:safePASSWORD123 /sf:/tmp/db/database.dacpac 
