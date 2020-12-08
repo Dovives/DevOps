@@ -38,7 +38,11 @@ jobs:
       - uses: azure/login@v1.1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
+
+      - name: CLI Creating Resource Group
+        run: |
+          az group create -l westeurope -n wks-devopsql-${{ env.ENV }}-rg
+
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
         with:
