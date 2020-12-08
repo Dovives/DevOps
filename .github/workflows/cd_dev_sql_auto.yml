@@ -9,7 +9,7 @@ on:
   push:
     # file paths to consider in the event. Optional; defaults to all.
     branches:  
-      - master    
+      - dev    
     paths:
       - '**wks-devops_az_sql/mssql-db/arm**'
 
