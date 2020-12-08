@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CD_stg_sql_auto_workflow 
+
+# Controls when the action will run. Triggers the workflow on manual request
+# and only if the "Dev Workflow" completed successfully
+on:
+  push:
+    # file paths to consider in the event. Optional; defaults to all.
+    branches:  
+      - stg    
+    paths:
+      - '**wks-devops_az_sql/mssql-db/arm**'
+
+
+jobs:
+  # This workflow contains a twos job called "sql-build" & "sql-deploy"
+  sql-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    env:
+      ENV: stg
+      LOCATION: westeurope
+      EDITION: basic
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: CLI Creating Resource Group
+        run: |
+          az group create -l westeurope -n wks-devopsql-${{ env.ENV }}-rg
+
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: 1619bfac-1484-4da0-95cc-dec25338e962
+          resourceGroupName: wks-devopsql-${{ env.ENV }}-rg
+          template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
+          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
+      
