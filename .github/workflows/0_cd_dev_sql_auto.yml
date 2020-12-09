@@ -47,7 +47,7 @@ jobs:
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
         with:
-          subscriptionId: 1619bfac-1484-4da0-95cc-dec25338e962
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }} 
           resourceGroupName: wks-devopsql-${{ env.ENV }}-rg
           template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
           parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
