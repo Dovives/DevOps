@@ -1,4 +1,11 @@
-﻿-- Create user for demo Encryptin Email
+﻿-- Alter Email Column 
+ALTER TABLE dbo.Customers ALTER COLUMN email 
+ADD MASKED WITH (Function='email()');
+GO
+
+
+use [DB]
+-- Create user for demo Encryptin Email
 CREATE USER reader
 	WITHOUT LOGIN
 	WITH DEFAULT_SCHEMA = dbo
@@ -6,13 +13,18 @@ CREATE USER reader
 GO
 -- Grant user 
 GRANT CONNECT TO reader
+-- Add user to reader role
+ALTER Role db_datareader ADD MEMBER reader; 
 
-SELECT * 
-From dbo.client
+EXECUTE AS USER = 'reader'
+SELECT * FROM dbo.Customers
 
-ALTER TABLE dbo.client ALTER COLUMN email 
-ADD MASKED WITH (Function='email()');
-GO
 
-EXECUTE AS USER = 'guest'
-SELECT * FROM dbo.client
+-- other option for reader user https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15
+
+CREATE USER reader WITHOUT LOGIN;  
+GRANT SELECT ON dbo.Customers TO reader;  
+  
+EXECUTE AS USER = 'reader';  
+SELECT * FROM dbo.Customers;  
+REVERT;
