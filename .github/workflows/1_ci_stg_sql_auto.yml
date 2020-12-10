@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI_dev_sql_auto_workflow 
+name: CI_stg_sql_auto_workflow 
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -8,7 +8,7 @@ on:
   push:
     # file paths to consider in the event. Optional; defaults to all.
     branches:  
-      - dev    
+      - stg    
     paths:
       - '**/wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/**'
 
@@ -20,9 +20,9 @@ jobs:
     runs-on: windows-latest
     
     env:
-      ENV: dev
+      ENV: stg
       LOCATION: westeurope
-      EDITION: free
+      EDITION: basic
 
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
