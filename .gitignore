@@ -2,6 +2,6 @@
 wks-devops_az_sql/config
 wks-devops_az_sql/workflow
 wks-devops_az_sql/ressources
-wks-devops_az_sql/mssql-db/ssdt
-!wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/Debug/*
+wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/*
+!wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin
 
