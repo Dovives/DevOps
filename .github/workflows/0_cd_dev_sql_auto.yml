@@ -103,7 +103,9 @@ jobs:
         echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
         echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
     - name: Test
-      run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
+      run: | 
+        cd wks-devops_az_sql/mssql-db/db-integrationtests
+        dotnet test --no-restore --no-build --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
