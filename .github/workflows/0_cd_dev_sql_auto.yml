@@ -56,12 +56,13 @@ jobs:
           path: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
 
 
-  sql-IntTest:
+  sql-IntegrationTest:
     # needs: [sql-deploy]
     runs-on: ubuntu-latest
 
     env:
       ENV: dev
+      config: 'Release'
 
     steps:
     - uses: actions/checkout@v2
@@ -77,7 +78,7 @@ jobs:
 
       # build project
     - name: Build
-      run: dotnet build wks-devops_az_sql/mssql-db/db-integrationtests --configuration Release --no-restore
+      run: dotnet build wks-devops_az_sql/mssql-db/db-integrationtests --configuration ${{ env.config }} --no-restore
 
     - name: set pr build number (if pr)
       id: PRNUMBER
@@ -103,7 +104,7 @@ jobs:
         echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
         echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
     - name: Test
-      run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration $config --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
+      run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration ${{ env.config }} --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
