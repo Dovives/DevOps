@@ -14,7 +14,6 @@ on:
 
 
 jobs:
-  # This workflow contains a twos job called "sql-build" & "sql-deploy"
     # This workflow contains a twos job called "sql-build" & "sql-deploy"
   sql-integrate:
     runs-on: windows-latest

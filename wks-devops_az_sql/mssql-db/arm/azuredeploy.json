@@ -105,7 +105,18 @@
                     "[resourceId('Microsoft.Sql/servers', concat(parameters('serverName')))]"
             ]
         }
-    ]
+    ],
+
+    "outputs": {
+    "sqlServerFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Sql/servers/', parameters('serverName'))).fullyQualifiedDomainName]"
+    },
+    "databaseName": {
+      "type": "string",
+      "value": "[parameters('sqlDBName')]"
+    }
+  }
 }
 
   

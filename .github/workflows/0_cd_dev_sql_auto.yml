@@ -40,6 +40,7 @@ jobs:
           az group create -l westeurope -n wks-devopsql-${{ env.ENV }}-rg
 
       - name: Deploy Azure Resource Manager (ARM) Template
+        id: deploy
         uses: Azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }} 
@@ -47,8 +48,13 @@ jobs:
           template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
           parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
 
+      - name: Create file 'ARM_Output.TXT' and write 'ARM Outputs' into it
+        run: |
+         echo ${{ steps.deploy.outputs.sqlServerFqdn }} > ARM_Output.TXT
+         echo ${{ steps.deploy.outputs.databaseName }} > ARM_Output.TXT
+
           # Upload ARM Template as artifact for future Ref.   
-      - name: Upload a Build Artifact
+      - name: Upload a ARM Artifact
         uses: actions/upload-artifact@v2
         if: ${{always()}}
         with:
