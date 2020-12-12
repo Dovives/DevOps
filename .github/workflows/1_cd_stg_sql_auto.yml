@@ -37,6 +37,12 @@ jobs:
         run: |
           az group create -l westeurope -n wks-devopsql-${{ env.ENV }}-rg
 
+      - name: Download ARM Template file 'azuredeploy.json' from artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: ARM_Template
+
+
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
         with:

@@ -52,11 +52,11 @@ jobs:
         uses: actions/upload-artifact@v2
         if: ${{always()}}
         with:
-          name: 'ARM Template'
+          name: 'ARM_Template'
           path: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
 
 
-  sql-test:
+  sql-IntTest:
     needs: [sql-deploy]
     runs-on: ubuntu-latest
 
@@ -106,7 +106,7 @@ jobs:
       uses: actions/upload-artifact@v2
       if: ${{always()}}
       with:
-        name: 'Test Run'
+        name: 'Integration_Test_Results'
         path: ${{github.workspace}}/${{env.file_name}}
     
     - name: comment PR   
