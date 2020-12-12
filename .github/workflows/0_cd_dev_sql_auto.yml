@@ -60,6 +60,9 @@ jobs:
     # needs: [sql-deploy]
     runs-on: ubuntu-latest
 
+    env:
+      ENV: dev
+      
     steps:
     - uses: actions/checkout@v2
     
@@ -96,9 +99,9 @@ jobs:
       # set report file and title
     - name: Set Test Env Variables 
       run: |
-        "echo "TestUser=${{ secrets.SQL_SA_USER }}" >> $GITHUB_ENV"
-        "echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV"
-        "echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV" 
+        echo "TestUser=${{ secrets.SQL_SA_USER }}" >> $GITHUB_ENV
+        echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
+        echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
     - name: Test
       run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration $config --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
 
