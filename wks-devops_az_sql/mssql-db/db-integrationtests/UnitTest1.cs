@@ -38,6 +38,7 @@ namespace db_integrationtests
             testOutputHelper.WriteLine(result.ToString());
             
             Assert.Equal(1, result);
+            
         }
     }
 }

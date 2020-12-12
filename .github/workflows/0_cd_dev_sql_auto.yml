@@ -24,7 +24,7 @@ jobs:
     env:
       ENV: dev
       LOCATION: westeurope
-      EDITION: free
+      EDITION: standard
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -57,7 +57,7 @@ jobs:
 
 
   sql-IntegrationTest:
-    # needs: [sql-deploy]
+    needs: [sql-deploy]
     runs-on: ubuntu-latest
 
     env:
