@@ -8,9 +8,11 @@ namespace db_integrationtests
 {
     public class UnitTest1
     {
+
         string Username = Environment.GetEnvironmentVariable("TestUser");
         string Password = Environment.GetEnvironmentVariable("TestPassword");
         string Host = Environment.GetEnvironmentVariable("TestHost");
+        string Database = Environment.GetEnvironmentVariable("TestDatabase");
         
         private readonly ITestOutputHelper testOutputHelper;
 
@@ -22,15 +24,25 @@ namespace db_integrationtests
         [Fact]
         public void Can_Select_1_From_Database()
         {
-            using var database = ThrowawayDatabase.Create(
-                Username, 
-                Password, 
-                Host
-            );
-            
-            testOutputHelper.WriteLine($"Created database {database.Name}");
 
-            using var connection = new SqlConnection(database.ConnectionString);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = Host; 
+            builder.UserID = Username;            
+            builder.Password = Password;     
+            builder.InitialCatalog = Database;
+            // builder.TrustServerCertificate = true;
+
+            // using var database = ThrowawayDatabase.Create(
+            //     Username, 
+            //     Password, 
+            //     Host
+            // );
+            
+            testOutputHelper.WriteLine($"Accessing database {Database}");
+
+            // using var connection = new SqlConnection(database.ConnectionString);
+            using var connection = new SqlConnection(builder.ConnectionString);
             connection.Open();
             using var cmd = new SqlCommand("SELECT 1", connection);
             var result = Convert.ToInt32(cmd.ExecuteScalar());
@@ -38,7 +50,7 @@ namespace db_integrationtests
             testOutputHelper.WriteLine(result.ToString());
             
             Assert.Equal(1, result);
-            
+
         }
     }
 }

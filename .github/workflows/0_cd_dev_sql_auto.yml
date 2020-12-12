@@ -50,10 +50,10 @@ jobs:
 
       - name: Create file 'ARM_Output.TXT' and write 'ARM Outputs' into it
         run: |
-         echo ${{ steps.deploy.outputs.sqlServerFqdn }} > ARM_Output.TXT
-         echo ${{ steps.deploy.outputs.databaseName }} > ARM_Output.TXT
+         echo ${{ steps.deploy.outputs.sqlServerFqdn }} >> ARM_Output.TXT
+         echo ${{ steps.deploy.outputs.databaseName }} >> ARM_Output.TXT
 
-          # Upload ARM Template as artifact for future Ref.   
+      # Upload ARM Template as artifact for future Ref.   
       - name: Upload a ARM Artifact
         uses: actions/upload-artifact@v2
         if: ${{always()}}
@@ -109,6 +109,7 @@ jobs:
         echo "TestUser=${{ secrets.SQL_SA_USER }}" >> $GITHUB_ENV
         echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
         echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
+        echo "TestDatabase=wksdevopsql-db-${{ env.ENV }}" >> $GITHUB_ENV 
     - name: Test
       run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration ${{ env.config }} --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
 
