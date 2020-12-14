@@ -1,27 +1,28 @@
 # This is a basic workflow to help you get started with Actions
 
-name: 0_CI_DEV_SQL_AUTO 
+name: 2_CI_PRD_sql_auto
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  push:
-    # file paths to consider in the event. Optional; defaults to all.
-    branches:  
-      - dev    
-    paths:
-      - '**/wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/**'
+  workflow_dispatch:
 
+  workflow_run:
+    workflows: ["1_CI_STG_SQL_AUTO"]
+    branches: [stg]
+    types: 
+      - completed
 
 jobs:
+  # This workflow contains a twos job called "sql-build" & "sql-deploy"
     # This workflow contains a twos job called "sql-build" & "sql-deploy"
   sql-integrate:
     runs-on: windows-latest
     
     env:
-      ENV: dev
+      ENV: stg
       LOCATION: westeurope
-      EDITION: standard
+      EDITION: basic
 
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -49,12 +50,13 @@ jobs:
         # In case DACPAC option is selected, additional SqlPackage.exe arguments that will be applied. When SQL query option is selected, additional sqlcmd.exe arguments will be applied.
         #arguments: # optional
 
-  sql-int-test:
+
+  sql-test:
       needs: [sql-integrate]
       runs-on: ubuntu-latest
 
       env:
-        ENV: dev
+        ENV: stg
         config: 'Release'
 
       steps:
