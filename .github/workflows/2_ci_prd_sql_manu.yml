@@ -20,9 +20,9 @@ jobs:
     runs-on: windows-latest
     
     env:
-      ENV: stg
+      ENV: prd
       LOCATION: westeurope
-      EDITION: basic
+      EDITION: standard
 
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -56,7 +56,7 @@ jobs:
       runs-on: ubuntu-latest
 
       env:
-        ENV: stg
+        ENV: prd
         config: 'Release'
 
       steps:
