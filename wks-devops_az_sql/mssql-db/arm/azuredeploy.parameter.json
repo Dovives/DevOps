@@ -6,7 +6,7 @@
             "value": "wksdevopazsql-sql-env"
         },
         "sqlDBName": {
-            "value": "wksdevopazsql-db-env"
+            "value": "wksdevopazsql-db"
         },
         "location": {
         "value": "[resourceGroup().location]"

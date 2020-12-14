@@ -12,6 +12,11 @@ on:
     paths:
       - '**/wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/**'
 
+  workflow_run:
+    workflows: ["1_CD_STG_DEV_AUTO"]
+    branches: [stg]
+    types: 
+      - completed
 
 jobs:
     # This workflow contains a twos job called "sql-build" & "sql-deploy"
@@ -41,7 +46,7 @@ jobs:
         # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
         server-name: wksdevopsql-sql-${{ env.ENV }}.database.windows.net
         # The connection string, including authentication information, for the Azure SQL Server database.
-        connection-string: Server=tcp:wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433;Initial Catalog=wksdevopsql-db-${{ env.ENV }};Persist Security Info=False;User ID=${{ secrets.SQL_SA_USER }};Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+        connection-string: Server=tcp:wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433;Initial Catalog=wksdevopsql-db;Persist Security Info=False;User ID=${{ secrets.SQL_SA_USER }};Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
         # Path to DACPAC file. *.dacpac or a folder to deploy
         dacpac-package: ./wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/Debug/DatabaseProjectrewardsdb.dacpac
         # Path to SQL script file. *.sql or a folder to deploy
@@ -49,7 +54,7 @@ jobs:
         # In case DACPAC option is selected, additional SqlPackage.exe arguments that will be applied. When SQL query option is selected, additional sqlcmd.exe arguments will be applied.
         #arguments: # optional
 
-  sql-int-test:
+  sql-test:
       needs: [sql-integrate]
       runs-on: ubuntu-latest
 
@@ -96,7 +101,7 @@ jobs:
           echo "TestUser=${{ secrets.SQL_SA_USER }}" >> $GITHUB_ENV
           echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
           echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
-          echo "TestDatabase=wksdevopsql-db-${{ env.ENV }}" >> $GITHUB_ENV 
+          echo "TestDatabase=wksdevopsql-db" >> $GITHUB_ENV 
       - name: Test
         run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration ${{ env.config }} --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
 

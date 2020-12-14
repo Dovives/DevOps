@@ -46,7 +46,7 @@ jobs:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }} 
           resourceGroupName: wks-devopsql-${{ env.ENV }}-rg
           template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
-          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
+          parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
 
       - name: Create file 'ARM_Output.TXT' and write 'ARM Outputs' into it
         run: |
@@ -62,7 +62,7 @@ jobs:
           path: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
 
 
-  sql-dep-test:
+  sql-test:
     needs: [sql-deploy]
     runs-on: ubuntu-latest
 
@@ -109,7 +109,7 @@ jobs:
         echo "TestUser=${{ secrets.SQL_SA_USER }}" >> $GITHUB_ENV
         echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
         echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
-        echo "TestDatabase=wksdevopsql-db-${{ env.ENV }}" >> $GITHUB_ENV 
+        echo "TestDatabase=wksdevopsql-db" >> $GITHUB_ENV 
     - name: Test
       run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration ${{ env.config }} --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
 
