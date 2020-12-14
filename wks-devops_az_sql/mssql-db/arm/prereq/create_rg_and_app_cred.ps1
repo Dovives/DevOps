@@ -1,4 +1,7 @@
-$projectName="pitchoun"
+#Optional Script as the Github Action check if RG exist - Should Update Script to automate RG creation in Azure & Repo + Secrets Creation in Github
+#https://github.com/cli/cli/pull/2529
+
+$projectName="yourproject"
 $location="westeurope"
 $resourceGroupName="${projectName}-dev-rg"
 $appName="http://${projectName}"

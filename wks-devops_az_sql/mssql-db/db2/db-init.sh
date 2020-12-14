@@ -1,5 +1,5 @@
 #wait for the SQL Server to come up
-sleep 50s
+sleep 35s
 
 
 # Wait 60 seconds for SQL Server to start up by ensuring that 

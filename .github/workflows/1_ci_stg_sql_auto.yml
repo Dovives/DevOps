@@ -1,0 +1,118 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 1_CI_STG_SQL_AUTO
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    # file paths to consider in the event. Optional; defaults to all.
+    branches:  
+      - stg    
+    paths:
+      - '**/wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/**'
+
+
+jobs:
+  # This workflow contains a twos job called "sql-build" & "sql-deploy"
+    # This workflow contains a twos job called "sql-build" & "sql-deploy"
+  sql-integrate:
+    runs-on: windows-latest
+    
+    env:
+      ENV: stg
+      LOCATION: westeurope
+      EDITION: basic
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Run a multi-line script
+      shell: bash
+      run: echo Checking ${{ env.SQLSERVER }} ${{ env.SQLCONNECTIONSTRING }} variable,
+      
+
+    - uses: azure/login@v1.1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Azure SQL Deploy
+      uses: Azure/sql-action@v1
+      with:
+        # Name of the Azure SQL Server name, like Fabrikam.database.windows.net.
+        server-name: wksdevopsql-sql-${{ env.ENV }}.database.windows.net
+        # The connection string, including authentication information, for the Azure SQL Server database.
+        connection-string: Server=tcp:wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433;Initial Catalog=wksdevopsql-db-${{ env.ENV }};Persist Security Info=False;User ID=${{ secrets.SQL_SA_USER }};Password=${{ secrets.SQL_SA_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+        # Path to DACPAC file. *.dacpac or a folder to deploy
+        dacpac-package: ./wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin/Debug/DatabaseProjectrewardsdb.dacpac
+        # Path to SQL script file. *.sql or a folder to deploy
+        #sql-file: # optional
+        # In case DACPAC option is selected, additional SqlPackage.exe arguments that will be applied. When SQL query option is selected, additional sqlcmd.exe arguments will be applied.
+        #arguments: # optional
+
+
+  sql-int-test:
+      needs: [sql-integrate]
+      runs-on: ubuntu-latest
+
+      env:
+        ENV: stg
+        config: 'Release'
+
+      steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101  
+      
+        # restore dependencies  
+      - name: Install dependencies
+        run: dotnet restore wks-devops_az_sql/mssql-db/db-integrationtests
+
+        # build project
+      - name: Build
+        run: dotnet build wks-devops_az_sql/mssql-db/db-integrationtests --configuration ${{ env.config }} --no-restore
+
+      - name: set pr build number (if pr)
+        id: PRNUMBER
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: kkak10/pr-number-action@v1.3
+        
+        # set report file and title 
+      - name: Set Test Title
+        run: | 
+              if ${{ github.event_name == 'pull_request' }}
+              then
+                echo "title=Test Run for PR #${{steps.PRNUMBER.outputs.pr}} (${{github.run_number}})" >> $GITHUB_ENV
+                echo "file_name=TestReport.${{steps.PRNUMBER.outputs.pr}}.${{github.run_number}}.md" >> $GITHUB_ENV
+              else
+                echo "title=Test Run ${{github.run_number}}" >> $GITHUB_ENV
+                echo "file_name=TestReport.${{github.run_number}}.md" >> $GITHUB_ENV
+              fi
+
+        # set report file and title
+      - name: Set Test Env Variables 
+        run: |
+          echo "TestUser=${{ secrets.SQL_SA_USER }}" >> $GITHUB_ENV
+          echo "TestPassword=${{ secrets.SQL_SA_PASSWORD }}" >> $GITHUB_ENV
+          echo "TestHost=wksdevopsql-sql-${{ env.ENV }}.database.windows.net,1433" >> $GITHUB_ENV 
+          echo "TestDatabase=wksdevopsql-db-${{ env.ENV }}" >> $GITHUB_ENV 
+      - name: Test
+        run: dotnet test wks-devops_az_sql/mssql-db/db-integrationtests --no-restore --no-build --configuration ${{ env.config }} --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2
+        if: ${{always()}}
+        with:
+          name: 'Integration_Test_Results'
+          path: ${{github.workspace}}/${{env.file_name}}
+      
+      # - name: comment PR   
+      #   uses: machine-learning-apps/pr-comment@master
+      #   if: ${{ github.event_name == 'pull_request' }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     path: ${{env.file_name}}
