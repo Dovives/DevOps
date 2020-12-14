@@ -37,11 +37,10 @@ jobs:
         run: |
           az group create -l westeurope -n wks-devopsql-${{ env.ENV }}-rg
 
-      - name: Download ARM Template file 'azuredeploy.json' from artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: ARM_Template
-
+      # - name: Download ARM Template file 'azuredeploy.json' from artifact
+      #   uses: actions/download-artifact@v1
+      #   with:
+      #     name: ARM_Template
 
       - name: Deploy Azure Resource Manager (ARM) Template
         uses: Azure/arm-deploy@v1
@@ -51,6 +50,14 @@ jobs:
           template: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
           parameters: 'serverName="wksdevopsql-sql-${{ env.ENV }}" sqlDBName="wksdevopsql-db-${{ env.ENV }}" location="${{ env.LOCATION }}" administratorLogin=${{ secrets.SQL_SA_USER }} administratorLoginPassword=${{ secrets.SQL_SA_PASSWORD }} databaseEdition="${{ env.EDITION }}" env="${{ env.ENV }}"'
       
+      # Upload ARM Template as artifact for future Ref.   
+      - name: Upload a ARM Artifact
+        uses: actions/upload-artifact@v2
+        if: ${{always()}}
+        with:
+          name: 'ARM_Template'
+          path: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
+
   sql-dep-test:
     needs: [sql-deploy]
     runs-on: ubuntu-latest
