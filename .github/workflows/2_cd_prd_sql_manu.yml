@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: CD_prd_sql_manu_workflow
+name: 1_CD_PRD_SQL_MANU
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.

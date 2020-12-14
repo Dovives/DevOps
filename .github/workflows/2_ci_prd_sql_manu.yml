@@ -1,17 +1,17 @@
 # This is a basic workflow to help you get started with Actions
 
-name: 2_CI_PRD_sql_auto
+name: 2_CI_PRD_SQL_MANU
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   workflow_dispatch:
 
-  workflow_run:
-    workflows: ["1_CI_STG_SQL_AUTO"]
-    branches: [stg]
-    types: 
-      - completed
+  # workflow_run:
+  #   workflows: ["1_CI_STG_SQL_AUTO"]
+  #   branches: [stg]
+  #   types: 
+  #     - completed
 
 jobs:
   # This workflow contains a twos job called "sql-build" & "sql-deploy"
@@ -20,9 +20,9 @@ jobs:
     runs-on: windows-latest
     
     env:
-      ENV: stg
+      ENV: prd
       LOCATION: westeurope
-      EDITION: basic
+      EDITION: standard
 
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -56,7 +56,7 @@ jobs:
       runs-on: ubuntu-latest
 
       env:
-        ENV: stg
+        ENV: prd
         config: 'Release'
 
       steps:
