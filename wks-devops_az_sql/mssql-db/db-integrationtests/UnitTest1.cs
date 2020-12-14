@@ -33,15 +33,9 @@ namespace db_integrationtests
             builder.InitialCatalog = Database;
             // builder.TrustServerCertificate = true;
 
-            // using var database = ThrowawayDatabase.Create(
-            //     Username, 
-            //     Password, 
-            //     Host
-            // );
             
             testOutputHelper.WriteLine($"Accessing database {Database}");
 
-            // using var connection = new SqlConnection(database.ConnectionString);
             using var connection = new SqlConnection(builder.ConnectionString);
             connection.Open();
             using var cmd = new SqlCommand("SELECT 1", connection);

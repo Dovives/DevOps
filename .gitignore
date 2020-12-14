@@ -9,3 +9,5 @@ wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/*
 !wks-devops_az_sql/mssql-db/ssdt/DatabaseProjectrewardsdb/bin
 
 wks-devops_az_sql/mssql-db/sql-query
+wks-devops_az_sql/mssql-db/db-unittests/obj
+

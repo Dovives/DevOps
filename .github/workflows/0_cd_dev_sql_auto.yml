@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CD_dev_sql_auto_workflow 
+name: 0_CD_DEV_SQL_AUTO
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -62,7 +62,7 @@ jobs:
           path: wks-devops_az_sql/mssql-db/arm/azuredeploy.json
 
 
-  sql-IntegrationTest:
+  sql-dep-test:
     needs: [sql-deploy]
     runs-on: ubuntu-latest
 
