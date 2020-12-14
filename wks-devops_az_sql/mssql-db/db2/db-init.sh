@@ -1,6 +1,5 @@
 #wait for the SQL Server to come up
-sleep 35s
-
+sleep 40
 
 # Wait 60 seconds for SQL Server to start up by ensuring that 
 # calling SQLCMD does not return an error code, which will ensure that sqlcmd is accessible
